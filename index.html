@@ -77,6 +77,7 @@
             background: linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #8b00ff, #ff0000);
             background-size: 200% auto;
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
             animation: rainbow 4s linear infinite;
             font-weight: 900;
@@ -171,7 +172,7 @@
 
     <div class="container">
         <h1><span class="sparkle">💊</span><span class="rainbow-text">無情の試紙裁切機</span><span class="sparkle">💉</span></h1>
-        <div class="subtitle" style="text-align: left; max-width: 400px; margin: 0 auto 30px auto; line-height: 1.6; font-size: 15px;">
+        <div class="subtitle" style="text-align: left; max-width: 650px; margin: 0 auto 30px auto; line-height: 1.6; font-size: 13px;">
             <strong>使用步驟：</strong><br>
             1. 先勾選 T1/T2/C line，並輸入試紙資訊。<br>
             2. 上傳欲裁切之試紙掃描圖。<br>
@@ -181,20 +182,43 @@
         </div>
 
         <div style="margin-bottom: 20px; text-align: center; background: var(--info-bg); padding: 15px; border-radius: 8px; transition: background 0.3s;">
-            <p style="color: var(--text-color); font-weight: bold; margin-top: 0; margin-bottom: 10px;">試紙Info.</p>
-            <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
-                <label style="display:flex; align-items:center; gap:6px; font-weight:bold; color:#e74c3c;">
-                    <input type="checkbox" id="chkT1" checked style="width:16px; height:16px; cursor:pointer;">
-                    T1: <input type="text" id="t1Input" placeholder="例如：A型流感" style="padding:5px; width:90px; border-radius:4px;">
-                </label>
-                <label style="display:flex; align-items:center; gap:6px; font-weight:bold; color:#c0392b;">
-                    <input type="checkbox" id="chkT2" style="width:16px; height:16px; cursor:pointer;">
-                    T2: <input type="text" id="t2Input" placeholder="例如：B型流感" style="padding:5px; width:90px; border-radius:4px;">
-                </label>
-                <label style="display:flex; align-items:center; gap:6px; font-weight:bold; color:#2980b9;">
-                    <input type="checkbox" id="chkC" checked style="width:16px; height:16px; cursor:pointer;">
-                    C: <input type="text" id="cInput" placeholder="例如：對照組" style="padding:5px; width:90px; border-radius:4px;">
-                </label>
+            <p style="color: var(--text-color); font-weight: bold; margin-top: 0; margin-bottom: 10px;">試紙資訊 (選填)：</p>
+            <div style="display: flex; flex-direction: column; align-items: center; margin-top: 15px;">
+                <div style="display: inline-block; text-align: left; width: fit-content;">
+                    <!-- T1, T2, C row -->
+                    <div style="display: flex; gap: 20px; margin-bottom: 12px;">
+                        <label style="display:flex; align-items:center; gap:6px; font-weight:bold; color:#e74c3c;">
+                            <input type="checkbox" id="chkT1" checked style="width:16px; height:16px; cursor:pointer;">
+                            T1: <input type="text" id="t1Input" placeholder="例如：MET" style="padding:5px; width:90px; border-radius:4px;">
+                        </label>
+                        <label style="display:flex; align-items:center; gap:6px; font-weight:bold; color:#c0392b;">
+                            <input type="checkbox" id="chkT2" style="width:16px; height:16px; cursor:pointer;">
+                            T2: <input type="text" id="t2Input" placeholder="例如：MOR" style="padding:5px; width:90px; border-radius:4px;">
+                        </label>
+                        <label style="display:flex; align-items:center; gap:6px; font-weight:bold; color:#2980b9;">
+                            <input type="checkbox" id="chkC" checked style="width:16px; height:16px; cursor:pointer;">
+                            C: <input type="text" id="cInput" value="ABGAM-0500" placeholder="ABGAM-0500" style="padding:5px; width:120px; border-radius:4px;">
+                        </label>
+                    </div>
+
+                    <!-- Rows with longer labels -->
+                    <style>
+                        .info-row { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; font-weight: bold; color: var(--text-color); }
+                        .info-row span { min-width: 110px; display: inline-block; }
+                    </style>
+                    <div class="info-row">
+                        <span>背板資訊:</span> <input type="text" id="backingInput" placeholder="請輸入資訊" style="padding: 5px; width: 600px; border-radius: 4px;">
+                    </div>
+                    <div class="info-row">
+                        <span>膠金墊資訊:</span> <input type="text" id="goldInput" placeholder="請輸入資訊" style="padding: 5px; width: 600px; border-radius: 4px;">
+                    </div>
+                    <div class="info-row">
+                        <span>其他試紙資訊:</span> <input type="text" id="otherInput" placeholder="請輸入資訊" style="padding: 5px; width: 600px; border-radius: 4px;">
+                    </div>
+                    <div class="info-row">
+                        <span>測試日期:</span> <input type="text" id="dateInput" placeholder="例如：2024/05/05" style="padding: 5px; width: 150px; border-radius: 4px;">
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -245,7 +269,6 @@
         <footer style="margin-top: 50px; padding-top: 20px; border-top: 1px solid var(--table-border); color: var(--subtitle-color); font-size: 12px; transition: border-color 0.3s;">
             &copy; 2024 試紙裁切專家. All Rights Reserved. 版權所有，未經授權請勿商業使用。
         </footer>
-    </div>
     </div>
 
     <!-- PptxGenJS -->
@@ -532,32 +555,40 @@
                             for (let j = Math.max(0,k-windowSpan); j <= Math.min(profile.length-1,k+windowSpan); j++) { sum+=profile[j]; count++; }
                             smoothed.push(sum/count);
                         }
-                        // 搜尋最多3條最暗的線（T1, T2, C）
-                        let searchStart = Math.floor(uniformW * 0.25);
-                        let searchEnd   = Math.floor(uniformW * 0.95);
-                        let minDist = Math.floor(uniformW * 0.05);
-                        let peaks = [];
-                        let tempSmoothed = smoothed.slice();
-                        for (let pass = 0; pass < 3; pass++) {
-                            let minVal = Infinity, minIdx = -1;
-                            for (let x = searchStart; x <= searchEnd; x++) {
-                                let tooClose = peaks.some(p => Math.abs(x - p.idx) < minDist);
-                                if (!tooClose && tempSmoothed[x] < minVal) { minVal = tempSmoothed[x]; minIdx = x; }
+                        // --- 改進的峰值偵測：尋找最右邊的紅線作為 C Line ---
+                        let searchStart = Math.floor(uniformW * 0.3);
+                        let searchEnd = Math.floor(uniformW * 0.9);
+                        let candidates = [];
+                        let threshold = 248; // 亮度略低於白色背景即視為候選線
+
+                        for (let x = searchStart + 1; x < searchEnd - 1; x++) {
+                            // 尋找局部最小值 (Dips)
+                            if (smoothed[x] < threshold && smoothed[x] <= smoothed[x-1] && smoothed[x] <= smoothed[x+1]) {
+                                // 確保這是一個顯著的谷底
+                                let isLocalMin = true;
+                                for(let k=1; k<=3; k++) {
+                                    if(smoothed[x] > smoothed[x-k] || smoothed[x] > smoothed[x+k]) { isLocalMin = false; break; }
+                                }
+                                if(isLocalMin) candidates.push(x);
                             }
-                            if (minIdx === -1) break;
-                            peaks.push({ idx: minIdx, val: minVal });
                         }
-                        // 按位置由左至右排序
-                        peaks.sort((a, b) => a.idx - b.idx);
-                        if (peaks.length >= 2) {
-                            globalT1Ratio = peaks[0].idx / uniformW;
-                            if (peaks.length === 3) {
-                                globalT2Ratio = peaks[1].idx / uniformW;
-                                globalCRatio  = peaks[2].idx / uniformW;
+
+                        if (candidates.length > 0) {
+                            // 關鍵邏輯：最右邊那一條必定是 C line
+                            let cIdx = Math.max(...candidates);
+                            globalCRatio = cIdx / uniformW;
+
+                            // 尋找左側的其他線作為 T Ratio 參考
+                            let others = candidates.filter(x => x < cIdx - Math.floor(uniformW * 0.04));
+                            if (others.length > 0) {
+                                globalT1Ratio = Math.max(...others) / uniformW; 
                             } else {
-                                globalT2Ratio = -1; // 只有2條線
-                                globalCRatio  = peaks[1].idx / uniformW;
+                                globalT1Ratio = globalCRatio - 0.1; 
                             }
+                        } else {
+                            // 預設安全值
+                            globalT1Ratio = 0.55;
+                            globalCRatio  = 0.65;
                         }
                     }
 
@@ -606,23 +637,81 @@
             const slideW = 10;
             const slideH = 5.625;
 
-            let t1 = document.getElementById('t1Input').value || "___________";
-            let t2 = document.getElementById('t2Input').value || "___________";
-            let cLine = document.getElementById('cInput').value || "___________";
+            let t1 = document.getElementById('t1Input').value || "";
+            let t2 = document.getElementById('t2Input').value || "";
+            let cLine = document.getElementById('cInput').value || "";
+            let backing = document.getElementById('backingInput').value || "";
+            let gold = document.getElementById('goldInput').value || "";
+            let other = document.getElementById('otherInput').value || "";
+            let testDate = document.getElementById('dateInput').value || "";
             
-            let titleText = `T1 : ${t1}        T2 : ${t2}        C Line : ${cLine}`;
-            slide.addText(titleText, { x: 0.3, y: 0.15, w: 9, h: 0.3, fontSize: 12, fontFace: "Times New Roman", bold: true, color: "000000", align: "left" });
+            // PPT 頁首格式優化
+            // 1. 測試日期框 (僅顯示日期，更靠左上)
+            slide.addText(testDate, { 
+                x: 0.1, y: 0.05, w: 1.5, h: 0.3, 
+                fontSize: 12, fontFace: "Times New Roman", bold: true, color: "000000", 
+                align: "center", border: { type: 'solid', color: '000000', pt: 1 } 
+            });
 
-            // 預覽中的標題
+            // 2. 其他資訊 (分成四行顯示，標楷體標籤 + TNR 數值)
+            let headerBaseY = 0.05;
+            let lineSpacing = 0.13;
+
+            // Line 1: T1, T2, C Line (僅顯示勾選項目)
+            let line1Parts = [];
+            let previewLine1 = "";
+            if (document.getElementById('chkT1').checked) {
+                line1Parts.push({ text: "T1 : ", options: { fontFace: "DFKai-SB" } });
+                line1Parts.push({ text: t1 + "    ", options: { fontFace: "Times New Roman" } });
+                previewLine1 += `T1 : ${t1}    `;
+            }
+            if (document.getElementById('chkT2').checked) {
+                line1Parts.push({ text: "T2 : ", options: { fontFace: "DFKai-SB" } });
+                line1Parts.push({ text: t2 + "    ", options: { fontFace: "Times New Roman" } });
+                previewLine1 += `T2 : ${t2}    `;
+            }
+            if (document.getElementById('chkC').checked) {
+                line1Parts.push({ text: "C Line : ", options: { fontFace: "DFKai-SB" } });
+                line1Parts.push({ text: cLine, options: { fontFace: "Times New Roman" } });
+                previewLine1 += `C Line : ${cLine}`;
+            }
+
+            if (line1Parts.length > 0) {
+                slide.addText(line1Parts, { x: 1.7, y: headerBaseY, w: 8.2, h: 0.2, fontSize: 8, color: "000000", align: "left" });
+            }
+
+            // Line 2: 背板
+            slide.addText([
+                { text: "背板 : ", options: { fontFace: "DFKai-SB" } }, { text: backing, options: { fontFace: "Times New Roman" } }
+            ], { x: 1.7, y: headerBaseY + lineSpacing, w: 8.2, h: 0.2, fontSize: 8, color: "000000", align: "left" });
+
+            // Line 3: 膠金墊
+            slide.addText([
+                { text: "膠金墊 : ", options: { fontFace: "DFKai-SB" } }, { text: gold, options: { fontFace: "Times New Roman" } }
+            ], { x: 1.7, y: headerBaseY + lineSpacing * 2, w: 8.2, h: 0.2, fontSize: 8, color: "000000", align: "left" });
+
+            // Line 4: 其他
+            slide.addText([
+                { text: "其他 : ", options: { fontFace: "DFKai-SB" } }, { text: other, options: { fontFace: "Times New Roman" } }
+            ], { x: 1.7, y: headerBaseY + lineSpacing * 3, w: 8.2, h: 0.2, fontSize: 8, color: "000000", align: "left" });
+
+            // 預覽中的標題 (更新為多行且靠左對齊)
+            let dateDiv = document.createElement('div');
+            dateDiv.style.position = 'absolute';
+            dateDiv.style.left = '1%'; dateDiv.style.top = '1%'; dateDiv.style.width = '14%'; dateDiv.style.height = '5%';
+            dateDiv.style.border = '1px solid black'; dateDiv.style.display = 'flex'; dateDiv.style.alignItems = 'center'; dateDiv.style.justifyContent = 'center';
+            dateDiv.style.fontSize = 'min(1.2vw, 10px)'; dateDiv.style.fontFamily = 'Times New Roman'; dateDiv.style.fontWeight = 'bold';
+            dateDiv.innerText = testDate;
+            previewContainer.appendChild(dateDiv);
+
             let titleDiv = document.createElement('div');
             titleDiv.style.position = 'absolute';
-            titleDiv.style.left = '3%';
-            titleDiv.style.top = '2.6%';
-            titleDiv.style.fontSize = 'min(2vw, 16px)';
-            titleDiv.style.fontFamily = 'Times New Roman';
-            titleDiv.style.fontWeight = 'bold';
-            titleDiv.style.whiteSpace = 'pre';
-            titleDiv.innerText = titleText;
+            titleDiv.style.left = '17%'; titleDiv.style.top = '1%';
+            titleDiv.style.textAlign = 'left';
+            titleDiv.style.fontSize = 'min(0.9vw, 7px)'; titleDiv.style.fontFamily = 'DFKai-SB, Times New Roman'; titleDiv.style.color = 'black';
+            titleDiv.style.whiteSpace = 'pre-wrap';
+            titleDiv.style.lineHeight = '1.4';
+            titleDiv.innerText = `${previewLine1}\n背板 : ${backing}\n膠金墊 : ${gold}\n其他 : ${other}`;
             previewContainer.appendChild(titleDiv);
 
             let avgRatio = globalProcessedStrips[0].w / globalProcessedStrips[0].h;
@@ -648,11 +737,11 @@
             let maxCount = Math.max(leftStrips.length, rightStrips.length);
             
             let totalHeightNeeded = maxCount * groupHeight - spacingToNext;
-            let startY = 0.5; 
-            if (totalHeightNeeded < 4.8) {
+            let startY = 0.7; // 增加起始位置以避開多行標題
+            if (totalHeightNeeded < 4.5) {
                 startY = (5.625 - totalHeightNeeded) / 2.0;
             }
-            if(startY < 0.5) startY = 0.5;
+            if(startY < 0.7) startY = 0.7;
 
             for (let i = 0; i < globalProcessedStrips.length; i++) {
                 let strip = globalProcessedStrips[i];
@@ -660,7 +749,7 @@
                 let currentTop;
 
                 if (!isTwoColumn) {
-                    left = (10 - targetW) / 2;
+                    left = (10 - targetW) / 2; // 回歸置中擺放
                     currentTop = startY + i * groupHeight;
                 } else {
                     let gap = 0.2; 
@@ -704,9 +793,19 @@
                     let w3 = 0.5 / 2.54;
                     let boxH = 0.3 / 2.54;
                     
-                    let cLineX = left + targetW * globalCRatio;
-                    let horizontalOffset = -0.5 / 2.54; 
-                    let startX = cLineX - (w3 / 2) - w2 - w1 + horizontalOffset;
+                    // 基礎偏移量：向右再回調 1cm (累計向左移動 1cm)
+                    let horizontalOffset = -1.0 / 2.54;
+                    let anchorX = 5.65;
+                    
+                    let cLineX;
+                    if (!isTwoColumn) {
+                        cLineX = anchorX + horizontalOffset;
+                    } else {
+                        // 兩欄模式下，根據圖片左邊界反推
+                        cLineX = left + targetW * globalCRatio + horizontalOffset;
+                    }
+                    
+                    let startX = cLineX - (w3 / 2) - w2 - w1;
                     
                     let baseOpts = { y: textY, h: boxH, fontSize: 7, fontFace: "Times New Roman", align: "center", valign: "top", color: "000000", margin: 0, line: { type: 'none' } };
                     
